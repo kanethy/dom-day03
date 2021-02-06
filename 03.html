@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+		table{width:700px}
+		td:first-child{width:60px}
+		td:nth-child(2){width:200px}
+		td:first-child+td{width:200px}
+		td span{color:red}
+		/*文本框旁边div隐藏的根源*/
+		.vali_info{
+			display:none;
+		}
+		.txt_focus{
+			border-top:2px solid black;
+			border-left:2px solid black;
+		}
+
+		.vali_success,.vali_fail{
+			background-repeat:no-repeat;
+			background-position:left center;
+			display:block;
+		}
+		/*文本框验证通过时 div的样式*/
+		.vali_success{
+				background-image:url("../images/ok.png");
+			padding-left:20px;
+			width:0px;height:20px;
+			overflow:hidden;
+		}
+		/*文本框验证失败时 div的样式*/
+		.vali_fail{
+				background-image:url("../images/err.png");
+				border:1px solid red;
+				background-color:#ddd;
+				color:Red;
+				padding-left:30px;
+		}
+
+        table{
+            width:600px; 
+            border-collapse:collapse;
+		    text-align:center;
+	        }
+	    td,th{border:1px solid #ccc}
+	</style>
+</head>
+<body>
+    <form id="form1">
+		<h2>增加管理员</h2>
+		<table>
+			<tr>
+				<td>姓名：</td>
+        		<td>
+					<input name="username"/>
+					<span>*</span>
+				</td>
+				<td>
+					<div class="vali_info">
+						10个字符以内的字母、数字或下划线的组合
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>密码：</td>
+				<td>
+					<input type="password" name="pwd"/>
+					<span>*</span>
+				</td>
+				<td>
+					<div class="vali_info">6位数字</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="2">
+          <input type="submit" value="保存"/>
+          <input type="reset" value="重填"/>
+				</td>
+			</tr>				
+	    </table>
+    </form>
+    <hr>
+    <div id="data">
+        <!-- table>thead>tr>th*3 -->
+          <table>
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>薪资</th>
+                <th>年龄</th>
+                <th>删除</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+    <script>
+
+        // var txtName=document.getElementsByName("username")[0];
+        var txtName=document.forms[0].username;
+        txtName.focus();
+        txtName.onfocus=function(){
+            var div=this.parentNode.nextElementSibling.children[0];
+            div.className="";
+        }
+
+        txtName.onblur=function(){
+            var div=this.parentNode.nextElementSibling.children[0];
+            var reg=/^\w{1,10}$/;
+            if(reg.test(this.value)==true){
+                div.className="vali_success";
+            }else{
+                div.className="vali_fail";
+            }
+        }
+
+        //var txtPwd=document.getElementsByName("pwd")[0];
+        var txtPwd=document.forms[0].pwd;
+        txtPwd.onfocus=function(){
+            var div=this.parentNode.nextElementSibling.children[0];
+            div.className="";
+        }
+
+        txtPwd.onblur=function(){
+            var div=this.parentNode.nextElementSibling.children[0]; 
+            var reg=/^\d{6}$/;
+            if(reg.test(this.value)==true){
+                div.className="vali_success";
+            }else{
+                div.className="vali_fail";
+            }
+        }
+
+
+        var a=document.createElement("a");
+        a.href="baidu.com";
+        a.innerHTML="go to baidu";
+        //document.body.appendChild(a);
+        var input=document.createElement("input");
+        //document.body.insertBefore(input,a);
+        //document.body.replaceChild(input,a);
+
+
+        var json=[
+            {"ename":"Tom", "salary":11000, "age":25},
+            {"ename":"John", "salary":13000, "age":28},
+            {"ename":"Mary", "salary":12000, "age":25}
+        ];
+
+        var table=document.querySelector("#data>table");//使用选择器找元素
+        var tbody=document.createElement("tbody");
+        //table.appendChild("tbody");
+        for(var emp of json){
+            //旧核心DOM:
+            // var tr=document.createElement("tr");
+            // tbody.appendChild(tr);
+             //HTML DOM:
+            var tr=tbody.insertRow();
+            for(var key in emp){
+                //旧核心DOM:
+                // var td=document.createElement("td");
+                // tr.appendChild(td);
+                //HTML DOM:
+                var td=tr.insertCell();
+                td.innerHTML=emp[key];
+            }
+           var td=tr.insertCell();
+           var btn=document.createElement("button");
+           td.appendChild(btn);
+           btn.innerHTML="×";
+           btn.onclick=function(){
+               var tr=this.parentNode.parentNode;
+               var ename=tr.cells[0].innerHTML;
+               if(confirm(`您确定要删除${ename}吗？`)==true){
+                   table.deleteRow(tr.rowIndex);
+               }
+           }
+        }
+        table.appendChild(tbody);
+    </script>
+</body>
+</html>

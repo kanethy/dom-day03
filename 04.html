@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{width:600px; border-collapse:collapse;
+            text-align:center;
+        }
+        td,th{border:1px solid #ccc}
+    </style>
+</head>
+<body>
+    <div id="data">
+        <!-- table>thead>tr>th*3 -->
+          <table>
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>薪资</th>
+                <th>年龄</th>
+              </tr>
+            </thead>
+            <tbody>
+      
+            </tbody>
+          </table>
+    </div>
+    <script>
+        var json=[
+            {"ename":"Tom", "salary":11000, "age":25},
+            {"ename":"John", "salary":13000, "age":28},
+            {"ename":"Mary", "salary":12000, "age":25}
+        ];
+
+        var frag=document.createDocumentFragment();
+        for(var emp of json){
+            var tr=document.createElement("tr");
+            frag.appendChild(tr);
+            for(var key in emp){
+                var td=document.createElement("td");
+                tr.appendChild(td);
+                td.innerHTML=emp[key];
+            }
+        }
+        var tbody=document.querySelector("#data>table>tbody");
+        tbody.appendChild(frag);
+    </script>
+</body>
+</html>
